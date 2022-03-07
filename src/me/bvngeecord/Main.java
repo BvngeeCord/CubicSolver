@@ -21,12 +21,18 @@ public class Main {
 1x+0x+0x+1
 1x+0x+0x-1
          */
-        System.out.println(solveCubic());
+        //System.out.println(solveCubic());
+        System.out.println(Arrays.toString(quadraticFormula(1, 4, -16)));
         //System.out.println(testPossibleFactor((double) Math.sqrt(1.5), new int[] {2, 4, -3, -6}));
     }
 
     public static List<String> solveCubic(){
         getTerms();
+        if (coefficients[coefficients.length] == 0){
+          return new ArrayList<String>();
+            
+            /*DoubleStream.of(quadraticFormula(coefficients[0], coefficients[1], coefficients[2])).boxed().map(String::parseDouble).collect(Collectors.toList());*/
+        }
         final List<String> possibleFactors = findPossibleFactors(Math.abs(coefficients[0]), Math.abs(coefficients[3]));
         System.out.println(possibleFactors);
         List<String> factors = new ArrayList<>();
@@ -47,7 +53,7 @@ public class Main {
 
     public static List<String> findPossibleFactors(double a, double d){
         int[] aFactors = combinationsOfFactors(factorsOf((int)a));
-        int[] dFactors = d==0 ? new int[] {0} : combinationsOfFactors(factorsOf((int)d));
+        int[] dFactors = combinationsOfFactors(factorsOf((int)d));
         List<String> possibleFactors = new ArrayList<>();
         for (int dFactor : dFactors) {
             for (int aFactor : aFactors) {
@@ -72,9 +78,13 @@ public class Main {
         return (temp < 0.01 && temp > -0.01);
     }
 
-    //public static double[] quadraticFormula(double[] terms){
-    //    return
-    //}
+    public static double[] quadraticFormula(double a, double b, double c){
+        double[] output = new double[2];  
+        for (int i = 0; i < 2; i++){
+          output[i] = ((-1 * b) + (Math.pow(-1, i) * (Math.sqrt((b*b) - (4*a*c))))) / (2*a);
+        }
+        return output;
+    }
 
     public static int[] factorsOf(int n) {
         List<Integer> factors = new ArrayList<>();
@@ -109,9 +119,8 @@ public class Main {
 
     public static void getTerms(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Input a cubic equation in the form of ax+bx+cx+d, in order of decending powers. Including all coefficients including 0s and 1s. Do not type the powers.");
+        System.out.println("Input a cubic equation in the form of ax+bx+cx+d, in order of decending powers. Include all coefficients including 0s and 1s. Do not type the powers.");
         String input = scanner.nextLine();
         coefficients = Arrays.stream(input.split("x+")).mapToDouble(Double::parseDouble).toArray();
     }
-
 }
