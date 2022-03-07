@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.DoubleStream;
 
 public class Main {
 
@@ -21,17 +22,18 @@ public class Main {
 1x+0x+0x+1
 1x+0x+0x-1
          */
-        //System.out.println(solveCubic());
-        System.out.println(Arrays.toString(quadraticFormula(1, 4, -16)));
+        System.out.println(solveCubic());
+        //System.out.println(Arrays.toString(quadraticFormula(1, 4, -16)));
         //System.out.println(testPossibleFactor((double) Math.sqrt(1.5), new int[] {2, 4, -3, -6}));
     }
 
     public static List<String> solveCubic(){
         getTerms();
-        if (coefficients[coefficients.length] == 0){
-          return new ArrayList<String>();
-            
-            /*DoubleStream.of(quadraticFormula(coefficients[0], coefficients[1], coefficients[2])).boxed().map(String::parseDouble).collect(Collectors.toList());*/
+        if (coefficients[coefficients.length-1] == 0){
+            List<String> quadraticFormula = DoubleStream.of(quadraticFormula(coefficients[0], coefficients[1], coefficients[2])).boxed().map(String::valueOf).toList();
+            List<String> output = new ArrayList<>(quadraticFormula);
+            output.add("0");
+            return output;
         }
         final List<String> possibleFactors = findPossibleFactors(Math.abs(coefficients[0]), Math.abs(coefficients[3]));
         System.out.println(possibleFactors);
