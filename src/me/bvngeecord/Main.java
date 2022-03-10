@@ -13,39 +13,32 @@ public class Main {
 
     public static void main(String[] args) {
         /*
-2x-12x+8x-0
-1x+0x-12x-3
-24x+12x-95x+34
-3x-14x+7x+96
-1x-5x+10x-23
-2x-14x+3x-0
-1x+0x+0x+1
-1x+0x+0x-1
+//1x+2x-9x-18
+//2x-12x+8x-0
+//1x+0x+1x+0
+//1x-28x-503136x-21998592
+
          */
         System.out.println(solveCubic());
-        //System.out.println(Arrays.toString(quadraticFormula(1, 4, -16)));
-        //System.out.println(testPossibleFactor((double) Math.sqrt(1.5), new int[] {2, 4, -3, -6}));
+
     }
 
     public static List<String> solveCubic(){
         getTerms();
         if (coefficients[coefficients.length-1] == 0){
-            List<String> quadraticFormula = DoubleStream.of(quadraticFormula(coefficients[0], coefficients[1], coefficients[2])).boxed().map(String::valueOf).toList();
-            List<String> output = new ArrayList<>(quadraticFormula);
-            output.add("0");
-            return output;
+            return quadraticFormula(coefficients[0], coefficients[1], coefficients[2]);
         }
         final List<String> possibleFactors = findPossibleFactors(Math.abs(coefficients[0]), Math.abs(coefficients[3]));
         System.out.println(possibleFactors);
         List<String> factors = new ArrayList<>();
         for (String possibleFactor : possibleFactors){
             double j = Double.parseDouble(possibleFactor);
-            if (testPossibleFactor(j, coefficients)) factors.add(String.valueOf(j));
+            if (testPossibleFactor(j, coefficients)) factors.add(possibleFactor);
         }
-        //System.out.println(factors);
-        if (factors.toArray().length < coefficients.length){
+        if (factors.toArray().length < coefficients.length-1){
             for (String possibleFactor : possibleFactors){
                 double h = Math.sqrt(Double.parseDouble(possibleFactor));
+                System.out.println(h);
                 if (h<0) continue;
                 if (testPossibleFactor(h, coefficients)) factors.add("±" + possibleFactor);
             }
@@ -61,8 +54,8 @@ public class Main {
             for (int aFactor : aFactors) {
                 double positive = (double) dFactor / aFactor;
                 double negative = -1 * positive;
-                //if (!possibleFactors.contains(String.valueOf(positive))) possibleFactors.add(String.valueOf(positive));
-                //if (!possibleFactors.contains(String.valueOf(negative))) possibleFactors.add(String.valueOf(negative));
+                if (!possibleFactors.contains(String.valueOf(positive))) possibleFactors.add(String.valueOf(positive));
+                if (!possibleFactors.contains(String.valueOf(negative))) possibleFactors.add(String.valueOf(negative));
             }
         }
         return possibleFactors;
@@ -75,17 +68,32 @@ public class Main {
             newCoefficients[i] = coefficients[i] + temp;
             temp = factor * (newCoefficients[i]);
         }
-                if (temp < 0.01 && temp > -0.01) System.out.println("hi " + Arrays.toString(newCoefficients));
-                if (newCoefficients[coefficients.length-1] < 0.01 && newCoefficients[coefficients.length-1] > -0.01) System.out.println("New Coeffs found");
+                //if (!(temp < 0.01 && temp > -0.01)) System.out.println("hi " + Arrays.toString(newCoefficients));
+                //if (newCoefficients[coefficients.length-1] < 0.01 && newCoefficients[coefficients.length-1] > -0.01) System.out.println("New Coeffs found");
         return (temp < 0.01 && temp > -0.01);
     }
 
-    public static double[] quadraticFormula(double a, double b, double c){
-        double[] output = new double[2];  
-        for (int i = 0; i < 2; i++){
-          output[i] = ((-1 * b) + (Math.pow(-1, i) * (Math.sqrt((b*b) - (4*a*c))))) / (2*a);
+    public static List<String> quadraticFormula(double a, double b, double c){
+        List<String> output = new ArrayList<>();
+        output.add("0");
+        double fourAC = (b*b) - (4*a*c);
+        double rootedTerm = Math.sqrt(fourAC);
+
+        if (Double.isNaN(rootedTerm)) {
+            // NaN
+            fourAC = Math.abs(fourAC);
+            output.add("( " + (-1*b) + " ± (i)sqrt(" + fourAC + ") ) / " + 2*a);
+        }else if (rootedTerm - Math.floor(rootedTerm) == 0){
+            // Perfect Square
+            for (int i = 0; i < 2; i++){
+                output.add(String.valueOf(((-1 * b) + (Math.pow(-1, i) * (rootedTerm))) / (2*a)));
+            }
+        }else {
+            // Normal
+            output.add("( " + (-1*b) + " ± sqrt(" + fourAC + ") ) / " + 2*a);
         }
         return output;
+
     }
 
     public static int[] factorsOf(int n) {
