@@ -12,15 +12,10 @@ public class Main {
     public static double[] coefficients;
 
     public static void main(String[] args) {
-        /*
-//1x+2x-9x-18
-//2x-12x+8x-0
-//1x+0x+1x+0
-//1x-28x-503136x-21998592
-
-         */
+        //1x+2x-9x-18
+        //2x-12x+8x-0
+        //1x+0x+1x+0
         System.out.println(solveCubic());
-
     }
 
     public static List<String> solveCubic(){
