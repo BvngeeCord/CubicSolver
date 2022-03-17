@@ -1,5 +1,6 @@
 package me.bvngeecord;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,17 +16,22 @@ public class Main {
         //1x+2x-9x-18
         //2x-12x+8x-0
         //1x+0x+1x+0
-        System.out.println(solveCubic());
+        //System.out.println(solveCubic());
+        System.out.println(quadraticFormula(2, -2, -4));
+        System.out.println(quadraticFormula(2, -6, 8));
     }
 
     public static List<String> solveCubic(){
         getTerms();
         if (coefficients[coefficients.length-1] == 0){
-            return quadraticFormula(coefficients[0], coefficients[1], coefficients[2]);
+            List<String> output = quadraticFormula(coefficients[0], coefficients[1], coefficients[2]);
+            output.add("0");
+            return output;
         }
-        final List<String> possibleFactors = findPossibleFactors(Math.abs(coefficients[0]), Math.abs(coefficients[3]));
-        System.out.println(possibleFactors);
+
         List<String> factors = new ArrayList<>();
+        final List<String> possibleFactors = findPossibleFactors(Math.abs(coefficients[0]), Math.abs(coefficients[3]));
+
         for (String possibleFactor : possibleFactors){
             double j = Double.parseDouble(possibleFactor);
             if (testPossibleFactor(j, coefficients)) factors.add(possibleFactor);
@@ -70,7 +76,6 @@ public class Main {
 
     public static List<String> quadraticFormula(double a, double b, double c){
         List<String> output = new ArrayList<>();
-        output.add("0");
         double fourAC = (b*b) - (4*a*c);
         double rootedTerm = Math.sqrt(fourAC);
 
