@@ -7,16 +7,10 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static List<Double> factors = new ArrayList<>();
     public static double[] coefficients;
 
     public static void main(String[] args) {
-        //1x+2x-9x-18
-        //2x-12x+8x-0
-        //1x+0x+1x+0
-        //System.out.println(solveCubic());
-        System.out.println(quadraticFormula(2, -2, -4));
-        System.out.println(quadraticFormula(2, -6, 8));
+        System.out.println(solveCubic());
     }
 
     public static List<String> solveCubic(){
@@ -67,8 +61,6 @@ public class Main {
             newCoefficients[i] = coefficients[i] + temp;
             temp = factor * (newCoefficients[i]);
         }
-                //if (!(temp < 0.01 && temp > -0.01)) System.out.println("hi " + Arrays.toString(newCoefficients));
-                //if (newCoefficients[coefficients.length-1] < 0.01 && newCoefficients[coefficients.length-1] > -0.01) System.out.println("New Coeffs found");
         return (temp < 0.01 && temp > -0.01);
     }
 
